@@ -17,7 +17,7 @@ def load_kaggle_data(kaggle_dataset_path):
         return None
 
 #Function to analyze the dataset
-def analyze_kaggle_data(df):
+def analyse_kaggle_data(df):
     print("\n===== Basic Info =====")
     print(df.info())
 

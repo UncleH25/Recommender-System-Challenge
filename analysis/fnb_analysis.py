@@ -17,7 +17,7 @@ def load_fnb_data(fnb_dataset_path):
         return None
 
 #Function to analyze the dataset
-def analyze_fnb_data(df):
+def analyse_fnb_data(df):
     print("\n===== Basic Info =====")
     print(df.info())
 
