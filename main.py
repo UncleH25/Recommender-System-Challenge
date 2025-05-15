@@ -13,7 +13,7 @@ def main():
 
     #If user chooses Kaggle dataset
     if choice == "1":
-        kaggle_path = os.path.join("data", "ecommerce_data.csv")
+        kaggle_path = os.path.join("data", "data.csv")
         df = load_kaggle_data(kaggle_path)
         analyse_kaggle_data(df)
     #If user chooses FNB dataset
