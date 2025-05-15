@@ -15,3 +15,20 @@ def load_kaggle_data(kaggle_dataset_path):
     except Exception as e:
         print(f"Error loading data: {e}")
         return None
+
+#Function to analyze the dataset
+def analyze_kaggle_data(df):
+    print("\n===== Basic Info =====")
+    print(df.info())
+
+    print("\n===== Head =====")
+    print(df.head())
+
+    print("\n===== Description =====")
+    print(df.describe(include='all'))
+
+    print("\n===== Missing Values =====")
+    print(df.isnull().sum())
+
+    print("\n===== Unique Values per Column =====")
+    print(df.nunique())
