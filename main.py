@@ -18,7 +18,7 @@ def main():
         analyse_kaggle_data(df)
     #If user chooses FNB dataset
     elif choice == "2":
-        fnb_path = os.path.join("data", "dq_ps_challenge_v2.csv")
+        fnb_path = os.path.join("data", "dq_ps_challenge_v2 1.csv")
         df = load_fnb_data(fnb_path)
         analyse_fnb_data(df)
     #If user chooses invalid option
