@@ -27,6 +27,7 @@
     <Compile Include="recommenders\fnb_recommender.py" />
     <Compile Include="recommenders\kaggle_recommender.py" />
     <Compile Include="utils\data_cleaning.py" />
+    <Compile Include="utils\data_preprocessing.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
