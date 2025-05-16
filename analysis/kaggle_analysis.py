@@ -32,17 +32,3 @@ def analyse_kaggle_data(df):
 
     print("\n===== Unique Values per Column =====")
     print(df.nunique())
-
-#Function to clean the dataset
-def clean_kaggle_data(df):
-    #Create a copy of the dataframe to avoid modifying the original
-    df = df.copy()
-    #Remove rows with missing values in 'CustomerID' and 'Description'
-    df.dropna(subset=['CustomerID', 'Description'], inplace=True)
-    #Keep only rows with positive 'Quantity' and 'UnitPrice'
-    df = df[(df['Quantity'] > 0) & (df['UnitPrice'] > 0)]
-    #Exclude rows where 'InvoiceNo' starts with 'C' (cancellations)
-    df = df[~df['InvoiceNo'].astype(str).str.startswith('C')]
-    #Convert 'InvoiceDate' to datetime format
-    df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])
-    return df
