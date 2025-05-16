@@ -47,5 +47,5 @@ def clean_fnb_data(df):
     df['beh_segment'] = df['beh_segment'].astype(str).str.strip().str.upper()
     df['active_ind'] = df['active_ind'].astype(str).str.strip().str.title()
     #Fill missing values in 'item_descrip' with 'None'
-    df['item_descrip'].fillna('None', inplace=True)
+    df['item_descrip'] = df['item_descrip'].fillna('None')
     return df
