@@ -2,6 +2,7 @@
 from analysis.kaggle_analysis import load_kaggle_data, analyse_kaggle_data
 from analysis.fnb_analysis import load_fnb_data, analyse_fnb_data
 from utils.data_cleaning import clean_kaggle_data, clean_fnb_data
+from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
 import os
 
 #main function
@@ -12,6 +13,8 @@ def main():
     print("2. Analyse FNB dataset")
     print("3. Clean Kaggle dataset")
     print("4. Clean FNB dataset")
+    print("5. Preprocess Kaggle Dataset")
+    print("6. Preprocess FNB Dataset")
     choice = input("Choose dataset to analyze (1 - 4): ")
 
     #If user chooses Kaggle dataset
@@ -38,6 +41,20 @@ def main():
         cleaned_df = clean_fnb_data(df)
         print("\nCleaned FNB dataset preview:")
         print(cleaned_df.head())
+    #If user chooses to preprocess Kaggle dataset
+    elif choice == "5":
+        kaggle_path = os.path.join("data", "data.csv")
+        df = load_kaggle_data(kaggle_path)
+        preprocessed_df, user_encoder, item_encoder = preprocess_kaggle_data(df)
+        print("\nPreprocessed Kaggle dataset preview:")
+        print(preprocessed_df.head())
+    #If user chooses to preprocess FNB dataset
+    elif choice == "6":
+        fnb_path = os.path.join("data", "dq_ps_challenge_v2 1.csv")
+        df = load_fnb_data(fnb_path)
+        preprocessed_df, user_encoder, item_encoder = preprocess_fnb_data(df)
+        print("\nPreprocessed FNB dataset preview:")
+        print(preprocessed_df.head())
     #If user chooses invalid option
     else:
         print("Invalid option.")
