@@ -2,7 +2,7 @@
 from analysis.kaggle_analysis import load_kaggle_data, analyse_kaggle_data
 from analysis.fnb_analysis import load_fnb_data, analyse_fnb_data
 from utils.data_cleaning import clean_kaggle_data, clean_fnb_data
-from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
+from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data, get_top_kaggle_items, get_top_fnb_items
 import os
 
 #main function
@@ -15,7 +15,9 @@ def main():
     print("4. Clean FNB dataset")
     print("5. Preprocess Kaggle Dataset")
     print("6. Preprocess FNB Dataset")
-    choice = input("Choose dataset to analyze (1 - 6): ")
+    print("7. Get Top 10 items from Kaggle dataset")
+    print("8. Get Top 10 items from FNB dataset")
+    choice = input("Choose dataset to analyze (1 - 8): ")
 
     #If user chooses Kaggle dataset
     if choice == "1":
@@ -55,6 +57,20 @@ def main():
         preprocessed_df, user_encoder, item_encoder = preprocess_fnb_data(df)
         print("\nPreprocessed FNB dataset preview:")
         print(preprocessed_df.head())
+    #If user chooses to get top 10 items from FNB dataset
+    elif choice == "7":
+        kaggle_path = os.path.join("data", "data.csv")
+        df = load_kaggle_data(kaggle_path)
+        top_items = get_top_kaggle_items(df)
+        print("\nTop 10 items from Kaggle dataset:")
+        print(top_items)
+    #If user chooses to get top 10 items from FNB dataset
+    elif choice == "8":
+        fnb_path = os.path.join("data", "dq_ps_challenge_v2 1.csv")
+        df = load_fnb_data(fnb_path)
+        top_items = get_top_fnb_items(df)
+        print("\nTop 10 items from FNB dataset:")
+        print(top_items)
     #If user chooses invalid option
     else:
         print("Invalid option.")
