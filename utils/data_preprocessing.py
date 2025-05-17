@@ -14,18 +14,18 @@ def preprocess_kaggle_data(df):
     df = df.copy()
 
     #Encode CustomerID and StockCode
-    user_coder = LabelEncoder()
-    item_coder = LabelEncoder()
+    kaggle_user_encoder = LabelEncoder()
+    kaggle_item_encoder = LabelEncoder()
 
     #Encode the CustomerID and StockCode as integers and store them in their new columns
-    df['user_id'] = user_coder.fit_transform(df['CustomerID'])
-    df['item_id'] = item_coder.fit_transform(df['StockCode'])
+    df['user_id'] = kaggle_user_encoder.fit_transform(df['CustomerID'])
+    df['item_id'] = kaggle_item_encoder.fit_transform(df['StockCode'])
 
     #Basic interaction score mapping
     interaction_map = {'DISPLAY': 1, 'CLICK': 2, 'CHECKOUT': 3}
     df['interaction_score'] = df['Interaction'].map(interaction_map)
 
-    return df, user_coder, item_coder
+    return df, kaggle_user_encoder, kaggle_item_encoder
 
 #Function to preprocess the fnb data
 def preprocess_fnb_data(df):
@@ -40,16 +40,16 @@ def preprocess_fnb_data(df):
     df = df.copy()
 
     #Encode idcol (cutomer) and item
-    user_encoder = LabelEncoder()
-    item_encoder = LabelEncoder()
+    fnb_user_encoder = LabelEncoder()
+    fnb_item_encoder = LabelEncoder()
 
     #Encode the idcol and item as integers and store them in their new columns
-    df['user_id'] = user_encoder.fit_transform(df['idcol'])
-    df['item_id'] = item_encoder.fit_transform(df['item'])
+    df['user_id'] = fnb_user_encoder.fit_transform(df['idcol'])
+    df['item_id'] = fnb_item_encoder.fit_transform(df['item'])
 
     #Basic interaction score mapping
     interaction_map = {'DISPLAY': 1, 'CLICK': 2, 'CHECKOUT': 3}
     df['interaction_score'] = df['Interaction'].map(interaction_map)
 
-    return df, user_encoder, item_encoder
+    return df, fnb_user_encoder, fnb_item_encoder
 
