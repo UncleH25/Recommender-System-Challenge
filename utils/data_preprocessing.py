@@ -1,5 +1,6 @@
 #imports
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
 #Function to preprocess the kaggle data
@@ -20,10 +21,6 @@ def preprocess_kaggle_data(df):
     #Encode the CustomerID and StockCode as integers and store them in their new columns
     df['user_id'] = kaggle_user_encoder.fit_transform(df['CustomerID'])
     df['item_id'] = kaggle_item_encoder.fit_transform(df['StockCode'])
-
-    #Basic interaction score mapping
-    interaction_map = {'DISPLAY': 1, 'CLICK': 2, 'CHECKOUT': 3}
-    df['interaction_score'] = df['Interaction'].map(interaction_map)
 
     return df, kaggle_user_encoder, kaggle_item_encoder
 
@@ -49,6 +46,9 @@ def preprocess_fnb_data(df):
 
     #Basic interaction score mapping
     interaction_map = {'DISPLAY': 1, 'CLICK': 2, 'CHECKOUT': 3}
+    #If the interaction column is not in the dataframe, create it randomly
+    if 'Interaction' not in df.columns:
+        df['Interaction'] = np.random.choice(list(interaction_map.keys()), size=len(df))
     df['interaction_score'] = df['Interaction'].map(interaction_map)
 
     return df, fnb_user_encoder, fnb_item_encoder
