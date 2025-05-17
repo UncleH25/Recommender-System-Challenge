@@ -15,7 +15,7 @@ def main():
     print("4. Clean FNB dataset")
     print("5. Preprocess Kaggle Dataset")
     print("6. Preprocess FNB Dataset")
-    choice = input("Choose dataset to analyze (1 - 4): ")
+    choice = input("Choose dataset to analyze (1 - 6): ")
 
     #If user chooses Kaggle dataset
     if choice == "1":
