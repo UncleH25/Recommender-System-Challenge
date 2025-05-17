@@ -24,8 +24,7 @@
     <Compile Include="analysis\fnb_analysis.py" />
     <Compile Include="analysis\kaggle_analysis.py" />
     <Compile Include="main.py" />
-    <Compile Include="recommenders\fnb_recommender.py" />
-    <Compile Include="recommenders\kaggle_recommender.py" />
+    <Compile Include="recommenders\popularity_based.py" />
     <Compile Include="utils\data_cleaning.py" />
     <Compile Include="utils\data_preprocessing.py" />
   </ItemGroup>
