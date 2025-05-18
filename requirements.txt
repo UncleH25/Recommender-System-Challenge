@@ -1,0 +1,16 @@
+# Core data handling
+pandas
+numpy
+
+# Preprocessing and encoding
+scikit-learn
+
+# Data visualization (optional for later insights)
+matplotlib
+seaborn
+
+# Recommender systems
+scikit-surprise
+
+# Date/time handling (built into pandas but listed for completeness)
+python-dateutil
