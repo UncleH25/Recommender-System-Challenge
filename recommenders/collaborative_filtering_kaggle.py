@@ -12,6 +12,7 @@ def normalize_quantity(df, cap=None, log_scale=True):
     - cap: (int) max limit to clip the values
     - log_scale: (bool) apply log1p scaling
     """
+
     #Copy the DataFrame to avoid modifying the original
     df = df.copy()
 
@@ -28,6 +29,7 @@ def precision_recall_at_k(predictions, k=10, threshold=1.0):
     """
     Compute Precision@K and Recall@K.
     """
+
     # Group predictions by user, storing (estimated_rating, true_rating) pairs for each user
     user_est_true = defaultdict(list)
     for uid, iid, true_r, est, _ in predictions:
@@ -67,6 +69,10 @@ def train_kaggle_user_cf(df, user_col='user_id', item_col='item_id', rating_col=
     """
     Train a user-based CF model using Kaggle dataset
     """
+
+    #Call precision_recall_at_k function to calculate precision and recall at k
+    precisions, recall = precision_recall_at_k(predictions)
+
     #Create a Reader object with the rating scale from 1 to the maximum value in the rating column
     reader = Reader(rating_scale=(1, df[rating_col].max()))
     #Load the DataFrame into a Surprise Dataset using the specified user, item, and rating column
@@ -80,8 +86,13 @@ def train_kaggle_user_cf(df, user_col='user_id', item_col='item_id', rating_col=
     algo.fit(trainset)
     #Generate predictions on the test set
     predictions = algo.test(testset)
+
     #Print the Root Mean Squared Error (RMSE) of the predictions
     print("User-based CF RMSE (Kaggle):", accuracy.rmse(predictions))
+    # Print the average Precision@10 with four decimal places
+    print(f"Precision@10: {precisions:.4f}")
+    # Print the average Recall@10 with four decimal places
+    print(f"Recall@10: {recall:.4f}")
     return algo
 
 #Function to train the item collaborative filtering model
@@ -89,6 +100,12 @@ def train_kaggle_item_cf(df, user_col='user_id', item_col='item_id', rating_col=
     """
     Train an item-based CF model using Kaggle dataset
     """
+
+    #Call precision_recall_at_k function to calculate precision and recall at k
+    precisions, recall = precision_recall_at_k(predictions)
+
+    #Apply normalization
+    df = normalize_quantity(df)  
     #Create a Reader object with the rating scale from 1 to the maximum value in the rating column
     reader = Reader(rating_scale=(1, df[rating_col].max()))
     #Load the DataFrame into a Surprise Dataset using the specified user, item, and rating column
@@ -102,6 +119,11 @@ def train_kaggle_item_cf(df, user_col='user_id', item_col='item_id', rating_col=
     algo.fit(trainset)
     #Generate predictions on the test set
     predictions = algo.test(testset)
+
     #Print the Root Mean Squared Error (RMSE) of the predictions
     print("Item-based CF RMSE (Kaggle):", accuracy.rmse(predictions))
+    # Print the average Precision@10 with four decimal places
+    print(f"Precision@10: {precisions:.4f}")
+    # Print the average Recall@10 with four decimal places
+    print(f"Recall@10: {recall:.4f}")
     return algo
