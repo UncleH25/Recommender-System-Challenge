@@ -51,5 +51,8 @@ def preprocess_fnb_data(df):
         df['Interaction'] = np.random.choice(list(interaction_map.keys()), size=len(df))
     df['interaction_score'] = df['Interaction'].map(interaction_map)
 
+    #Implicit score based on quantity
+    df['interaction_score'] = df['Quantity']  
+
     return df, fnb_user_encoder, fnb_item_encoder
 
