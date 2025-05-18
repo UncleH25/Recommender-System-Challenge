@@ -11,9 +11,6 @@ seaborn
 
 # Recommender systems
 implicit
-tensorflow
-tensorflow-recommenders
-tensorflow-datasets
 
 # Date/time handling (built into pandas but listed for completeness)
 python-dateutil
