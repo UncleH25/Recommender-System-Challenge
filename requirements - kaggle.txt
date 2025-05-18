@@ -1,0 +1,5 @@
+# For Kaggle recommender system
+pandas
+numpy
+scikit-learn
+scikit-surprise
