@@ -4,7 +4,7 @@ numpy
 
 # Preprocessing and encoding
 scikit-learn
-scikit-surprise
+lightfm
 
 # Data visualization (optional for later insights)
 matplotlib
