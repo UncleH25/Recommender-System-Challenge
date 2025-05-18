@@ -20,7 +20,8 @@ def main():
     print("7. Get Top 10 items from Kaggle dataset")
     print("8. Get Top 10 items from FNB dataset")
     print("9. Train implicit ALS (FNB)")
-    choice = input("Choose dataset to analyze (1 - 9): ")
+    print("10. Train implicit ALS (Kaggle)")
+    choice = input("Choose dataset to analyze (1 - 10): ")
 
     #If user chooses Kaggle dataset
     if choice == "1":
@@ -83,6 +84,17 @@ def main():
         print("\nBuilding user-item matrix...")
         matrix = build_interaction_matrix(preprocessed)
         print("Training Implicit ALS model...")
+        model = train_implicit_als(matrix)
+        print("Model training complete.")
+    #If user chooses to train implicit ALS model (Kaggle)
+    elif choice == "10":
+        kaggle_path = os.path.join("data", "data.csv")
+        df = load_kaggle_data(kaggle_path)
+        cleaned = clean_kaggle_data(df)
+        preprocessed, _, _ = preprocess_kaggle_data(cleaned)
+        print("\nBuilding user-item matrix for Kaggle...")
+        matrix = build_interaction_matrix(preprocessed)
+        print("Training Implicit ALS model (Kaggle)...")
         model = train_implicit_als(matrix)
         print("Model training complete.")
     #If user chooses invalid option
