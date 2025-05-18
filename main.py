@@ -5,6 +5,7 @@ from utils.data_cleaning import clean_kaggle_data, clean_fnb_data
 from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
 from recommenders.popularity_based import get_top_kaggle_items, get_top_fnb_items
 from recommenders.collaborative_filtering import build_interaction_matrix, train_implicit_als
+from recommenders.collaborative_filtering_kaggle import train_kaggle_user_cf, train_kaggle_item_cf
 import os
 
 #main function
@@ -20,7 +21,9 @@ def main():
     print("7. Get Top 10 items from Kaggle dataset")
     print("8. Get Top 10 items from FNB dataset")
     print("9. Train implicit ALS (FNB)")
-    choice = input("Choose dataset to analyze (1 - 9): ")
+    print("10. Train user CF (Kaggle)")
+    print("11. Train item CF (Kaggle)")
+    choice = input("Choose dataset to analyze (1 - 11): ")
 
     #If user chooses Kaggle dataset
     if choice == "1":
@@ -85,6 +88,20 @@ def main():
         print("Training Implicit ALS model...")
         model = train_implicit_als(matrix)
         print("Model training complete.")
+    #If user chooses to train user CF model (Kaggle)
+    elif choice == "10":
+        kaggle_path = os.path.join("data", "data.csv")
+        df = load_kaggle_data(kaggle_path)
+        cleaned_df = clean_kaggle_data(df)
+        preprocessed_df, _, _ = preprocess_kaggle_data(cleaned_df)
+        train_kaggle_user_cf(preprocessed_df)
+    #If user chooses to train item CF model (Kaggle)
+    elif choice == "11":
+        kaggle_path = os.path.join("data", "data.csv")
+        df = load_kaggle_data(kaggle_path)
+        cleaned_df = clean_kaggle_data(df)
+        preprocessed_df, _, _ = preprocess_kaggle_data(cleaned_df)
+        train_kaggle_item_cf(preprocessed_df)
     #If user chooses invalid option
     else:
         print("Invalid option.")
