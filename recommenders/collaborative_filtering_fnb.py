@@ -2,6 +2,8 @@
 import pandas as pd
 import scipy.sparse as sparse
 from implicit.als import AlternatingLeastSquares
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
 #Function to build Interaction Matrix
 def build_interaction_matrix(df, user_col='user_id', item_col='item_id', rating_col='interaction_score'):
