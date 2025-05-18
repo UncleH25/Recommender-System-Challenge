@@ -24,3 +24,25 @@ def train_kaggle_user_cf(df, user_col='user_id', item_col='item_id', rating_col=
     #Print the Root Mean Squared Error (RMSE) of the predictions
     print("User-based CF RMSE (Kaggle):", accuracy.rmse(predictions))
     return algo
+
+#Function to train the item collaborative filtering model
+def train_kaggle_item_cf(df, user_col='user_id', item_col='item_id', rating_col='Quantity'):
+    """
+    Train an item-based CF model using Kaggle dataset
+    """
+    #Create a Reader object with the rating scale from 1 to the maximum value in the rating column
+    reader = Reader(rating_scale=(1, df[rating_col].max()))
+    #Load the DataFrame into a Surprise Dataset using the specified user, item, and rating column
+    data = Dataset.load_from_df(df[[user_col, item_col, rating_col]], reader)
+    #Split the dataset into training and testing sets (80% train, 20% test)
+    trainset, testset = train_test_split(data, test_size=0.2)
+
+    #Initialise the KNNBasic algorithm for item-based collaborative filtering
+    algo = KNNBasic(sim_options={'user_based': False})
+    #Train the algorithm on the training set
+    algo.fit(trainset)
+    #Generate predictions on the test set
+    predictions = algo.test(testset)
+    #Print the Root Mean Squared Error (RMSE) of the predictions
+    print("Item-based CF RMSE (Kaggle):", accuracy.rmse(predictions))
+    return algo
