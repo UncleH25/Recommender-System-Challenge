@@ -4,7 +4,7 @@ from analysis.fnb_analysis import load_fnb_data, analyse_fnb_data
 from utils.data_cleaning import clean_kaggle_data, clean_fnb_data
 from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
 from recommenders.popularity_based import get_top_kaggle_items, get_top_fnb_items
-from recommenders.collaborative_filtering_fnb import build_interaction_matrix, train_implicit_als
+from recommenders.collaborative_filtering import build_interaction_matrix, train_implicit_als
 import os
 
 #main function
