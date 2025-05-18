@@ -12,3 +12,16 @@ def build_interaction_matrix(df, user_col='user_id', item_col='item_id', rating_
     return sparse.csr_matrix(
         (df[rating_col], (df[user_col], df[item_col]))
     )
+
+#Function to train the ALS model
+def train_implicit_als(interaction_matrix, factors=50, iterations=10, regularization=0.01):
+    """
+    Train an implicit ALS model
+    """
+    #Create the ALS model
+    model = AlternatingLeastSquares(factors=factors,
+                                     regularization=regularization,
+                                     iterations=iterations)
+    #Implicit expects item-user matrix
+    model.fit(interaction_matrix.T)
+    return model
