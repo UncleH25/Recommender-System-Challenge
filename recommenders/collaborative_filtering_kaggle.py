@@ -93,7 +93,7 @@ def train_kaggle_user_cf(df, user_col='user_id', item_col='item_id', rating_col=
     print(f"Precision@10: {precisions:.4f}")
     # Print the average Recall@10 with four decimal places
     print(f"Recall@10: {recall:.4f}")
-    return algo
+    return algo, precisions, recall
 
 #Function to train the item collaborative filtering model
 def train_kaggle_item_cf(df, user_col='user_id', item_col='item_id', rating_col='Quantity'):
@@ -126,4 +126,4 @@ def train_kaggle_item_cf(df, user_col='user_id', item_col='item_id', rating_col=
     print(f"Precision@10: {precisions:.4f}")
     # Print the average Recall@10 with four decimal places
     print(f"Recall@10: {recall:.4f}")
-    return algo
+    return algo, precisions, recall
