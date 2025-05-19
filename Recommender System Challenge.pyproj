@@ -36,6 +36,7 @@
     <Folder Include="data\" />
     <Folder Include="analysis\" />
     <Folder Include="models\" />
+    <Folder Include="results\" />
     <Folder Include="output\" />
     <Folder Include="utils\" />
     <Folder Include="recommenders\" />

@@ -27,3 +27,20 @@ def train_implicit_als(interaction_matrix, factors=50, iterations=10, regulariza
     #Implicit expects item-user matrix
     model.fit(interaction_matrix.T)
     return model
+
+#Function to log results into a file
+def log_fnb_results(results, filename='fnb_results.txt'):
+    """
+    Log a message with a timestamp to the specified log file.
+    """
+
+    # Ensure the 'results' directory exists
+    os.makedirs('results', exist_ok=True)
+    
+    #Get current timestamp in a readable format
+    timestamp = pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    #Open the log file in append mode
+    with open(filename, 'a') as f:
+        #Write the timestamp and results to the log file
+        f.write(f"{timestamp} - {results}\n")
