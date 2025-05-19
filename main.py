@@ -77,7 +77,7 @@ def main():
         top_items = get_top_fnb_items(df)
         print("\nTop 10 items from FNB dataset:")
         print(top_items)
-    #If user chooses to train implicit ALS model (FNB)
+        #If user chooses to train implicit ALS model (FNB)
     elif choice == "9":
         fnb_path = os.path.join("data", "dq_ps_challenge_v2 1.csv")
         df = load_fnb_data(fnb_path)
@@ -88,7 +88,8 @@ def main():
         print("Training Implicit ALS model...")
         model = train_implicit_als(matrix)
         print("Model training complete.")
-        log_fnb_results("Implicit ALS model trained successfully.")
+        # Log the result
+        log_fnb_results("Trained implicit ALS model on FNB dataset.", filename="results/fnb_results.txt")
     #If user chooses to train user CF model (Kaggle)
     elif choice == "10":
         kaggle_path = os.path.join("data", "data.csv")

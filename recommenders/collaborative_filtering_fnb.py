@@ -40,6 +40,9 @@ def log_fnb_results(results, filename='fnb_results.txt'):
     #Get current timestamp in a readable format
     timestamp = pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')
 
+    #Write to the 'results' folder
+    file_path = os.path.join('results', filename)
+
     #Open the log file in append mode
     with open(filename, 'a') as f:
         #Write the timestamp and results to the log file
