@@ -4,7 +4,7 @@ from analysis.fnb_analysis import load_fnb_data, analyse_fnb_data
 from utils.data_cleaning import clean_kaggle_data, clean_fnb_data
 from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
 from recommenders.popularity_based import get_top_kaggle_items, get_top_fnb_items
-from recommenders.collaborative_filtering import build_interaction_matrix, train_implicit_als
+from recommenders.collaborative_filtering_fnb import build_interaction_matrix, train_implicit_als, log_fnb_results
 from recommenders.collaborative_filtering_kaggle import train_kaggle_user_cf, train_kaggle_item_cf
 import os
 
@@ -88,6 +88,7 @@ def main():
         print("Training Implicit ALS model...")
         model = train_implicit_als(matrix)
         print("Model training complete.")
+        log_fnb_results("Implicit ALS model trained successfully.")
     #If user chooses to train user CF model (Kaggle)
     elif choice == "10":
         kaggle_path = os.path.join("data", "data.csv")
