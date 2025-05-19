@@ -1,5 +1,6 @@
 #imports
 import os
+import pandas as pd
 import numpy as np
 from collections import defaultdict
 from surprise import Dataset, Reader, KNNBasic

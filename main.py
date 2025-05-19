@@ -5,7 +5,7 @@ from utils.data_cleaning import clean_kaggle_data, clean_fnb_data
 from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
 from recommenders.popularity_based import get_top_kaggle_items, get_top_fnb_items
 from recommenders.collaborative_filtering_fnb import build_interaction_matrix, train_implicit_als, log_fnb_results
-from recommenders.collaborative_filtering_kaggle import train_kaggle_user_cf, train_kaggle_item_cf
+from recommenders.collaborative_filtering_kaggle import train_kaggle_user_cf, train_kaggle_item_cf, log_kaggle_results
 import os
 
 #main function
@@ -96,14 +96,26 @@ def main():
         df = load_kaggle_data(kaggle_path)
         cleaned_df = clean_kaggle_data(df)
         preprocessed_df, _, _ = preprocess_kaggle_data(cleaned_df)
-        train_kaggle_user_cf(preprocessed_df)
+        _, precision, recall = train_kaggle_user_cf(preprocessed_df)
+        # Log the results in the results folder
+        from recommenders.collaborative_filtering_kaggle import log_kaggle_results
+        log_kaggle_results(
+            f"User-based CF model trained on Kaggle dataset. Precision@10: {precision:.4f}, Recall@10: {recall:.4f}",
+            filename="kaggle_results.txt"
+        )
     #If user chooses to train item CF model (Kaggle)
     elif choice == "11":
         kaggle_path = os.path.join("data", "data.csv")
         df = load_kaggle_data(kaggle_path)
         cleaned_df = clean_kaggle_data(df)
         preprocessed_df, _, _ = preprocess_kaggle_data(cleaned_df)
-        train_kaggle_item_cf(preprocessed_df)
+        _, precision, recall = train_kaggle_item_cf(preprocessed_df)
+        # Log the results in the results folder
+        from recommenders.collaborative_filtering_kaggle import log_kaggle_results
+        log_kaggle_results(
+            f"Item-based CF model trained on Kaggle dataset. Precision@10: {precision:.4f}, Recall@10: {recall:.4f}",
+            filename="kaggle_results.txt"
+        )
     #If user chooses invalid option
     else:
         print("Invalid option.")

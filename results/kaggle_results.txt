@@ -1,0 +1,2 @@
+2025-05-19 18:08:05 - User-based CF model trained on Kaggle dataset. Precision@10: 1.0000, Recall@10: 0.7520
+2025-05-19 18:08:55 - Item-based CF model trained on Kaggle dataset. Precision@10: 0.8987, Recall@10: 0.7559
