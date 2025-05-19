@@ -1,9 +1,30 @@
 #imports
+import os
 import numpy as np
 from collections import defaultdict
 from surprise import Dataset, Reader, KNNBasic
 from surprise.model_selection import train_test_split
 from surprise import accuracy
+
+# Function to log results into a file in the 'results' folder
+def log_kaggle_results(results, filename='kaggle_results.txt'):
+    """
+    Log a message with a timestamp to a log file in the 'results' folder.
+    """
+
+    # Ensure the 'results' directory exists
+    os.makedirs('results', exist_ok=True)
+
+    # Get current timestamp in a readable format
+    timestamp = pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Always write to the 'results' folder
+    file_path = os.path.join('results', filename)
+
+    # Open the log file in append mode
+    with open(file_path, 'a') as f:
+        # Write the timestamp and results to the log file
+        f.write(f"{timestamp} - {results}\n")
 
 #Function to normalize the Quantity column
 def normalize_quantity(df, cap=None, log_scale=True):
