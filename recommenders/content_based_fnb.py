@@ -20,3 +20,23 @@ def build_content_matrix(df, content_col='item_descrip'):
     item_indices = pd.Series(df.index, index=df['item_id']).drop_duplicates()
 
     return tfidf_matrix, item_indices
+
+#Function to get similar items based on cosine similarity
+def get_similar_items(item_id, tfidf_matrix, item_indices, top_n=10):
+    """
+    Get top-N items most similar to the given item_id based on cosine similarity
+    """
+
+    #Get the row index of the given item_id in the TF-IDF matrix
+    idx = item_indices[item_id]
+
+    #Compute cosine similarity between the given item's vector and all item vectors
+    cosine_sim = linear_kernel(tfidf_matrix[idx:idx+1], tfidf_matrix).flatten()
+    #Pair each item index with its similarity score
+    sim_scores = list(enumerate(cosine_sim))
+    #Sort the items by similarity score in descending order
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    #Select the top_n most similar items, excluding the item itself (which is always first)
+    top_items = sim_scores[1:top_n+1]
+
+    return [(item_id, score) for item_id, score in top_items]
