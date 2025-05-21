@@ -77,6 +77,9 @@ def print_recommendation_report(df, recommendations, item_col='item_id', content
     Print recommended item details (item_id + description + score)
     """
 
+    #Create a lookup dictionary from item_id to item_descrip
+    id_to_desc = df.drop_duplicates(subset=[item_col]).set_index(item_col)[content_col].to_dict()
+
     #Print a header for the recommendations section
     print("\nTop Recommended Items:")
     #Iterate over each recommended item and its similarity score
