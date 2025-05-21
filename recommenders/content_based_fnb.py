@@ -6,9 +6,9 @@ from sklearn.metrics.pairwise import linear_kernel
 #Function for content-based filtering using TF-IDF
 def build_content_matrix(df, content_col='item_descrip'):
     """
-    Build TF-IDF matrix from item_descrip or item_type
+    Build a TF-IDF matrix from item_descrip or item_type
     Returns:
-    - tfidf_matrix: item × token matrix
+    - tfidf_matrix: item * token matrix
     - item_indices: mapping of item_id to row index
     """
 
@@ -16,8 +16,8 @@ def build_content_matrix(df, content_col='item_descrip'):
     tfidf = TfidfVectorizer(stop_words='english')
     #Fit the vectorizer on the content column (fill missing values with empty string) and transform to a TF-IDF matrix
     tfidf_matrix = tfidf.fit_transform(df[content_col].fillna(""))
-    #Create a mapping from item_id to the row index in the TF-IDF matrix, ensuring no duplicates
-    item_indices = pd.Series(df.index, index=df['item_id']).drop_duplicates()
+    #Create a mapping from item_id to the row index in the TF-IDF matrix, ensuring no duplicates and adding to the dictionary
+    item_indices = pd.Series(df.index, index=df['item_id']).drop_duplicates().to_dict()
 
     return tfidf_matrix, item_indices
 
@@ -70,3 +70,22 @@ def recommend_for_user(df, user_id, user_col='user_id', item_col='item_id', cont
     #Sort recommended items by similarity score in descending order and select top_n
     ranked_items = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
     return ranked_items
+
+#Function to print recommendations report
+def print_recommendation_report(df, recommendations, item_col='item_id', content_col='item_descrip'):
+    """
+    Print recommended item details (item_id + description + score)
+    """
+
+    #Print a header for the recommendations section
+    print("\nTop Recommended Items:")
+    #Iterate over each recommended item and its similarity score
+    for item_id, score in recommendations:
+        try:
+            #Retrieve the description for the current item_id from the DataFrame
+            description = df[df[item_col] == item_id][content_col].values[0]
+        except IndexError:
+            #If the item_id is not found, set description as "Unknown"
+            description = "Unknown"
+        #Print the item ID, similarity score, and description in a formatted string
+        print(f"Item ID: {item_id:<5} | Similarity: {score:.4f} | Description: {description}")

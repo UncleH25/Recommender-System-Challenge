@@ -6,7 +6,7 @@ from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
 from recommenders.popularity_based import get_top_kaggle_items, get_top_fnb_items
 from recommenders.collaborative_filtering_fnb import build_interaction_matrix, train_implicit_als, log_fnb_results
 from recommenders.collaborative_filtering_kaggle import train_kaggle_user_cf, train_kaggle_item_cf, log_kaggle_results
-from recommenders.content_based_fnb import recommend_for_user
+from recommenders.content_based_fnb import recommend_for_user, print_recommendation_report
 import os
 
 #main function
@@ -119,7 +119,7 @@ def main():
             filename="kaggle_results.txt"
         )
     #If user chooses to get recommended items (FNB)
-    elif choice == "13":
+    elif choice == "12":
         df = load_fnb_data(os.path.join("data", "dq_ps_challenge_v2 1.csv"))
         cleaned = clean_fnb_data(df)
         preprocessed, _, _ = preprocess_fnb_data(cleaned)
@@ -127,6 +127,7 @@ def main():
         recommendations = recommend_for_user(preprocessed, user_id)
         print(f"\nContent-based recommendations for user {user_id}:")
         print(recommendations)
+        print_recommendation_report(preprocessed, recommendations)
     #If user chooses invalid option
     else:
         print("Invalid option.")
