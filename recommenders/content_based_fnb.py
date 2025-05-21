@@ -40,3 +40,33 @@ def get_similar_items(item_id, tfidf_matrix, item_indices, top_n=10):
     top_items = sim_scores[1:top_n+1]
 
     return [(item_id, score) for item_id, score in top_items]
+
+#Function to give recommendations to the user
+def recommend_for_user(df, user_id, user_col='user_id', item_col='item_id', content_col='item_descrip', top_n=10):
+    """
+    Recommend content-similar items based on what the user has interacted with
+    """
+
+    #Build the TF-IDF matrix and item index mapping from the content column
+    tfidf_matrix, item_indices = build_content_matrix(df, content_col)
+    #Get all unique items the user has interacted with
+    user_items = df[df[user_col] == user_id][item_col].unique()
+
+    #Dictionary to store the highest similarity score for each recommended item
+    scores = {}
+    for item_id in user_items:
+        try:
+            #Get similar items for each item the user has interacted with
+            similar_items = get_similar_items(item_id, tfidf_matrix, item_indices, top_n=top_n)
+            for sim_item, score in similar_items:
+                #Only consider items the user hasn't already interacted with
+                if sim_item not in user_items:
+                    #Store the highest similarity score for each item
+                    scores[sim_item] = max(scores.get(sim_item, 0), score)
+        except KeyError:
+            #Item not in index, skip to next
+            continue  
+
+    #Sort recommended items by similarity score in descending order and select top_n
+    ranked_items = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
+    return ranked_items
