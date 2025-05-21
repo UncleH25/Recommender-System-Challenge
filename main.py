@@ -6,6 +6,7 @@ from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
 from recommenders.popularity_based import get_top_kaggle_items, get_top_fnb_items
 from recommenders.collaborative_filtering_fnb import build_interaction_matrix, train_implicit_als, log_fnb_results
 from recommenders.collaborative_filtering_kaggle import train_kaggle_user_cf, train_kaggle_item_cf, log_kaggle_results
+from recommenders.content_based_fnb import recommend_for_user
 import os
 
 #main function
@@ -23,7 +24,8 @@ def main():
     print("9. Train implicit ALS (FNB)")
     print("10. Train user CF (Kaggle)")
     print("11. Train item CF (Kaggle)")
-    choice = input("Choose dataset to analyze (1 - 11): ")
+    print("12. Get recommended items (FNB)")
+    choice = input("Choose dataset to analyze (1 - 12): ")
 
     #If user chooses Kaggle dataset
     if choice == "1":
@@ -77,7 +79,7 @@ def main():
         top_items = get_top_fnb_items(df)
         print("\nTop 10 items from FNB dataset:")
         print(top_items)
-        #If user chooses to train implicit ALS model (FNB)
+    #If user chooses to train implicit ALS model (FNB)
     elif choice == "9":
         fnb_path = os.path.join("data", "dq_ps_challenge_v2 1.csv")
         df = load_fnb_data(fnb_path)
@@ -116,6 +118,15 @@ def main():
             f"Item-based CF model trained on Kaggle dataset. Precision@10: {precision:.4f}, Recall@10: {recall:.4f}",
             filename="kaggle_results.txt"
         )
+    #If user chooses to get recommended items (FNB)
+    elif choice == "13":
+        df = load_fnb_data(os.path.join("data", "dq_ps_challenge_v2 1.csv"))
+        cleaned = clean_fnb_data(df)
+        preprocessed, _, _ = preprocess_fnb_data(cleaned)
+        user_id = int(input("Enter a user_id to recommend for: "))
+        recommendations = recommend_for_user(preprocessed, user_id)
+        print(f"\nContent-based recommendations for user {user_id}:")
+        print(recommendations)
     #If user chooses invalid option
     else:
         print("Invalid option.")
