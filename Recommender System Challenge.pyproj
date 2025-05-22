@@ -28,6 +28,7 @@
     <Compile Include="recommenders\collaborative_filtering_fnb.py" />
     <Compile Include="recommenders\collaborative_filtering_kaggle.py" />
     <Compile Include="recommenders\content_based_fnb.py" />
+    <Compile Include="recommenders\evaluation_fnb.py" />
     <Compile Include="recommenders\popularity_based.py" />
     <Compile Include="utils\data_cleaning.py" />
     <Compile Include="utils\data_preprocessing.py" />
