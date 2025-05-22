@@ -3,11 +3,10 @@ from analysis.kaggle_analysis import load_kaggle_data, analyse_kaggle_data
 from analysis.fnb_analysis import load_fnb_data, analyse_fnb_data
 from utils.data_cleaning import clean_kaggle_data, clean_fnb_data
 from utils.data_preprocessing import preprocess_kaggle_data, preprocess_fnb_data
-from recommenders.evaluation_fnb import evaluate_precision_recall
 from recommenders.popularity_based import get_top_kaggle_items, get_top_fnb_items
 from recommenders.collaborative_filtering_fnb import build_interaction_matrix, train_implicit_als, log_fnb_results
 from recommenders.collaborative_filtering_kaggle import train_kaggle_user_cf, train_kaggle_item_cf, log_kaggle_results
-from recommenders.content_based_fnb import recommend_for_user, print_recommendation_report
+from recommenders.content_based_fnb import recommend_for_user, print_recommendation_report, build_content_matrix
 import os
 
 #main function
@@ -26,7 +25,8 @@ def main():
     print("10. Train user CF (Kaggle)")
     print("11. Train item CF (Kaggle)")
     print("12. Get recommended items (FNB)")
-    choice = input("Choose dataset to analyze (1 - 12): ")
+    print("13. Compare what a user CHECKEDOUTed vs what was recommended (FNB)")
+    choice = input("Choose dataset to analyze (1 - 13): ")
 
     #If user chooses Kaggle dataset
     if choice == "1":
@@ -66,9 +66,6 @@ def main():
         preprocessed_df, user_encoder, item_encoder = preprocess_fnb_data(df)
         print("\nPreprocessed FNB dataset preview:")
         print(preprocessed_df.head())
-        precision, recall = evaluate_precision_recall(preprocessed, recommend_for_user, k=10)
-        print(f"\nContent-Based Precision@10: {precision:.4f}")
-        print(f"Content-Based Recall@10: {recall:.4f}")
     #If user chooses to get top 10 items from FNB dataset
     elif choice == "7":
         kaggle_path = os.path.join("data", "data.csv")
@@ -132,6 +129,18 @@ def main():
         print(f"\nContent-based recommendations for user {user_id}:")
         print(recommendations)
         print_recommendation_report(preprocessed, recommendations)
+    #If the user chooses to compare what a user CHECKEDOUTed vs what was recommended (FNB)
+    elif choice == "13":
+        df = load_fnb_data(os.path.join("data", "dq_ps_challenge_v2 1.csv"))
+        cleaned = clean_fnb_data(df)
+        preprocessed, _, _ = preprocess_fnb_data(cleaned)
+
+        from recommenders.content_based_fnb import build_content_matrix, show_recommendation_report_for_user
+
+        tfidf_matrix, item_indices = build_content_matrix(preprocessed)
+
+        user_id = int(input("Enter user_id to test: "))
+        show_recommendation_report_for_user(preprocessed, user_id, tfidf_matrix, item_indices)
     #If user chooses invalid option
     else:
         print("Invalid option.")

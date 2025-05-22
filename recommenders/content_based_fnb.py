@@ -42,7 +42,16 @@ def get_similar_items(item_id, tfidf_matrix, item_indices, top_n=10):
     return [(item_id, score) for item_id, score in top_items]
 
 #Function to give recommendations to the user
-def recommend_for_user(df, user_id, user_col='user_id', item_col='item_id', content_col='item_descrip', top_n=10):
+def recommend_for_user(
+    df,
+    user_id,
+    user_col='user_id',
+    item_col='item_id',
+    content_col='item_descrip',
+    top_n=10,
+    tfidf_matrix=None,
+    item_indices=None
+):
     """
     Recommend content-similar items based on what the user has interacted with
     """
@@ -92,3 +101,42 @@ def print_recommendation_report(df, recommendations, item_col='item_id', content
             description = "Unknown"
         #Print the item ID, similarity score, and description in a formatted string
         print(f"Item ID: {item_id:<5} | Similarity: {score:.4f} | Description: {description}")
+
+#Function to show a report of what the user CHECKEDOUTed vs what was recommended
+def show_recommendation_report_for_user(df, user_id, tfidf_matrix=None, item_indices=None, top_n=10):
+    """
+    Prints what the user CHECKOUTed vs. what the recommender returns (side-by-side).
+    """
+    # Print the user ID for context
+    print(f"\n User ID: {user_id}")
+
+    # Get CHECKOUTed items for the user (interaction_score == 3)
+    checkout_df = df[(df['user_id'] == user_id) & (df['interaction_score'] == 3)][['item_id', 'item_descrip']].drop_duplicates()
+    if checkout_df.empty:
+        # Inform if the user has no CHECKOUT interactions
+        print(" This user has no CHECKOUT interactions.")
+        return
+
+    # Print the list of items the user CHECKOUTed
+    print("\n Items this user CHECKOUTed:")
+    for _, row in checkout_df.iterrows():
+        print(f"  - {row['item_id']: <5} | {row['item_descrip']}")
+
+    # Get recommendations for the user using the content-based recommender
+    from .content_based_fnb import recommend_for_user
+    recs = recommend_for_user(df, user_id, top_n=top_n, tfidf_matrix=tfidf_matrix, item_indices=item_indices)
+
+    if not recs:
+        # Inform if no recommendations were returned
+        print("\n No recommendations returned.")
+        return
+
+    # Print the top-N content-based recommendations
+    print(f"\n Top {top_n} content-based recommendations:")
+    # Create a lookup dictionary for item descriptions
+    id_to_desc = df.drop_duplicates(subset=['item_id']).set_index('item_id')['item_descrip'].to_dict()
+
+    # Print each recommended item with its description and similarity score
+    for item_id, score in recs:
+        desc = id_to_desc.get(item_id, "Unknown")
+        print(f"  - {item_id: <5} | {desc} | similarity: {score:.4f}")
