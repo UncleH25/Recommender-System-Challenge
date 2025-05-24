@@ -53,30 +53,32 @@ def recommend_for_user(
     item_indices=None
 ):
     """
-    Recommend content-similar items based on what the user has interacted with
+    Recommend content-similar items based on what the user has interacted with.
+    Optionally accepts precomputed tfidf_matrix and item_indices for efficiency.
     """
+    # If the TF-IDF matrix or item indices are not provided, build them from the DataFrame
+    if tfidf_matrix is None or item_indices is None:
+        tfidf_matrix, item_indices = build_content_matrix(df, content_col)
 
-    #Build the TF-IDF matrix and item index mapping from the content column
-    tfidf_matrix, item_indices = build_content_matrix(df, content_col)
-    #Get all unique items the user has interacted with
+    # Get all unique items the user has interacted with
     user_items = df[df[user_col] == user_id][item_col].unique()
-
-    #Dictionary to store the highest similarity score for each recommended item
+    # Dictionary to store the highest similarity score for each recommended item
     scores = {}
+    # For each item the user has interacted with
     for item_id in user_items:
         try:
-            #Get similar items for each item the user has interacted with
+            # Get similar items for the current item using the TF-IDF matrix
             similar_items = get_similar_items(item_id, tfidf_matrix, item_indices, top_n=top_n)
             for sim_item, score in similar_items:
-                #Only consider items the user hasn't already interacted with
+                # Only consider items the user hasn't already interacted with
                 if sim_item not in user_items:
-                    #Store the highest similarity score for each item
+                    # Store the highest similarity score for each recommended item
                     scores[sim_item] = max(scores.get(sim_item, 0), score)
         except KeyError:
-            #Item not in index, skip to next
-            continue  
+            # If the item_id is not found in the index, skip to the next item
+            continue
 
-    #Sort recommended items by similarity score in descending order and select top_n
+    # Sort recommended items by similarity score in descending order and select the top_n
     ranked_items = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
     return ranked_items
 
